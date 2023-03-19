@@ -35,3 +35,49 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </React.StrictMode>
 );
 ```
+
+## Nested Routes
+
+- when a component should render inside another component (child component). That is a child of the main component,
+- the above code is adjusted as follows. Take note of the `children` route inside the object.
+
+```jsx
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+      },
+    ],
+  },
+]);
+```
+
+-  lastly we need to indicate where the child component should be rendered in the parent element. That is done by importing
+`import { Outlet } from "react-router-dom";` in the parent element and placing the `Outlet` at the position where the child 
+component should be rendered.
+
+```jsx
+// src/routes/root.jsx
+ import { Outlet } from "react-router-dom";
+
+export default function Root() {
+  return (
+    <>
+      {/* all the other elements */}
+      <div id="detail">
+        <Outlet />
+      </div>
+    </>
+  );
+}
+```
+
+## client side routing
+- using the anchor element `a` causes the browser to do a full document request for the next URL instead of using React Router.
+Client side routing allows our app to update the URL without requesting another document from the server. Instead, the app can immediately render new UI.
+That can be done using the `Link` element.
